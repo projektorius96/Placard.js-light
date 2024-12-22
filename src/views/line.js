@@ -10,6 +10,7 @@ export default class {
         }
         ,
         KIND: {
+            vector(){},
             line(){},
             ring(){},
         }
@@ -64,7 +65,7 @@ export default class {
                                 ( context.global.options.responsiveValue * ( point[1] ) ) - (options.lineWidth ||  context.global.options.lineWidth)
                             );
                             break;
-                        default /* === 'circle' */:
+                        default /* === 'circle' || === 'line' */:
                             context.moveTo(
                                 0
                                 , 

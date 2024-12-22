@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 ,
                 new Placard.ViewGroup.Layer({name: 'ring', hidden: true})
                 ,
+                new Placard.ViewGroup.Layer({name: 'origin', hidden: !true})
+                ,
             ]);
         
             if ( setViews(stage) ) {

@@ -7,7 +7,7 @@ import UserSettings from '../user-settings';
 
 export default function (stage){
 
-    const { setAngle } = Placard.Helpers.Trigonometry;
+    const { setAngle, degToRad } = Placard.Helpers.Trigonometry;
 
     Placard
     .init({stage, stageScale: 20 /* <=== # thumb of rule is between 15-20 (in relative units) */})
@@ -31,6 +31,51 @@ export default function (stage){
                         )
                         ,
 
+                    ])
+                break;
+
+                /* === ORIGIN === */
+                case 'origin':
+
+                    // DEV_NOTE (A) # Mocking the 'right-triangle' scenario where the current transformation matrix is as follows:..
+                    context.setTransform(...setAngle(-45), stage.grid.X_IN_MIDDLE, stage.grid.Y_IN_MIDDLE/2);
+                    stage.layers[canvas.name].addViews([
+                        void function() {
+
+                            // Calculate the midpoint of the viewport
+                            const 
+                                midX = stage.grid.X_IN_MIDDLE
+                                ,
+                                midY = stage.grid.Y_IN_MIDDLE
+                            ;
+
+                            context.save();
+
+                            // Considering mocked (A) to be reset before following `rotation-about-origin` combination as defined below:..
+                            context.resetTransform();
+
+                            /* === rotation-about-origin === */
+                            
+                                // Translate to the rotation origin (midpoint of viewport)
+                                context.translate(midX, midY);
+
+                                // Apply rotation
+                                context.rotate( degToRad( -45 ) );
+
+                                // // Translate back by the shape's offset
+                                context.translate(-midX, -midY);
+
+                            /* === rotation-about-origin === */
+
+                            // Draw the shape
+                            const rectWidth = 30;
+                            const rectHeight = 30;
+                            context.fillStyle = 'black';
+                            context.fillRect(midX - rectWidth / 2, midY - rectHeight / 2, rectWidth, rectHeight);
+
+                            context.restore(); // Restore the state
+                        }()
+                        ,
                     ])
                 break;
 

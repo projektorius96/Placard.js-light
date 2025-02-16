@@ -1,0 +1,19 @@
+{
+    "lang": "en-us",
+    "short_name": "Placard.js-light",
+    "description": "An interactive tool for system-agnostic kinematics",
+    "start_url": "/Placard.js-site",
+    "display": "standalone",
+    "icons": [
+        {
+            "sizes": "192x192",
+            "src": "/Placard.js-site/pwa/images/maskable_icon_x192.png",
+            "type": "image/png"
+        },
+        {
+            "sizes": "512x512",
+            "src": "/Placard.js-site/pwa/images/maskable_icon_x512.png",
+            "type": "image/png"
+        }
+    ]
+}

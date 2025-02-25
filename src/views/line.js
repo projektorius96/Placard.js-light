@@ -89,10 +89,11 @@ export default class {
         context.lineWidth = options.lineWidth || context.global.options.lineWidth;
         context.strokeStyle = options.strokeStyle || context.global.options.strokeStyle;
         context.fillStyle = options.fillStyle || context.global.options.fillStyle;
-        context.fillStroke();
-
+        options.hidden ? false : context.fillStroke();
+        
         context.restore();
 
+        options.hidden ? options.kind = `!${this.ENUMS.KIND.vector.value}` : options.kind;
         if (options.kind === this.ENUMS.KIND.vector.value) {
 
             options.points.forEach((point)=>{
@@ -146,6 +147,17 @@ export default class {
             const arrowY1 = y2 - arrowTip.baseLength * Math.sin(arrowAngle1);
             const arrowX2 = x2 - arrowTip.baseLength * Math.cos(arrowAngle2);
             const arrowY2 = y2 - arrowTip.baseLength * Math.sin(arrowAngle2);
+
+            /* === */
+
+            if (options.overrides?.transform){
+                if (options.overrides.transform?.scale){
+                    let { x, y } = options.overrides.transform.scale;
+                    context.scale(x, y);
+                }
+            }
+
+            /* === */
             
             // Draw the arrowhead
             context.beginPath();

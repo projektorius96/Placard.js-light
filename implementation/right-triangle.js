@@ -13,6 +13,8 @@ export default class {
             Placard.Views.Line.draw({
                 canvas,
                 options: {
+                    hidden: false,
+                    label: `vector-${COLORS.red.value}`,
                     kind: 'vector',
                     strokeStyle: COLORS.red.value,
                     points: [ 
@@ -26,6 +28,8 @@ export default class {
             Placard.Views.Line.draw({
                 canvas,
                 options: {
+                    hidden: false,
+                    label: `vector-${COLORS.green.value}`,
                     kind: 'vector', /* DEV_NOTE # can be used with `arrowTip`  */
                     /* arrowTip : {baseLength : 20, capLength : 0, width : 20}, */// 1^[PASSING]
                     strokeStyle: COLORS.green.value,
@@ -46,6 +50,8 @@ export default class {
             Placard.Views.Line.draw({
                 canvas,
                 options: {
+                    hidden: false,
+                    label: `vector-${COLORS.blue.value}`,
                     kind: 'vector',
                     strokeStyle: COLORS.blue.value,
                     points: [ 

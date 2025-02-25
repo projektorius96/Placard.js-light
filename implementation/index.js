@@ -48,7 +48,7 @@ export default function setView({stage, Placard, UserSettings}){
 
                 case 'axes-helper' :
 
-                    context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, stage.grid.X_IN_MIDDLE, stage.grid.Y_IN_MIDDLE); // # Layer-level transformation
+                    context.setTransform(...setAngle(0), stage.grid.X_IN_MIDDLE, stage.grid.Y_IN_MIDDLE); // # Layer-level transformation
                         AxesHelper.draw({context, Placard});
                 
                 break;

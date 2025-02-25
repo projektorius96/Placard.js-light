@@ -85,6 +85,53 @@ switch(canvas.name) {
 // ...
 ```
 
+### Hide Layer(s)
+
+A. - Explicit way: go to **`./main.js`** and pass the `hidden: !false` to one of your Layer(s), e.g. Layer hosting Grid view:
+
+```js
+
+const stage = new Placard.ViewGroup.Stage({scale: 30});
+    stage.add([
+        new Placard.ViewGroup.Layer({name: 'grid', opacity: 0.25, hidden: false})
+        ,
+        new Placard.ViewGroup.Layer({name: 'your-implementation'})
+        ,
+    ]);
+
+```
+
+> **NOTE**: passing `true` as `!false`, makes it easy for you to _toggle_ between states at source-level, all you need to is comment out or uncomment (to reverse the process) the exclamation mark !
+
+B. - Implicit way (hocus pocus): go to **`./implmentation/index.js`**, find switch statement matching against, for consistency, let's take the same Grid view and prefix it with Boolean-like exclamation mark to avoid from matching against `canvas.name`, for an example:
+
+```js
+
+// ...
+
+    // DEV_NOTE # as you see, I have prefixed 'grid' with conventional exclamation mark, this opts out the context from drawing on bitmap
+    case '!grid' :
+
+        stage.layers.grid.add([
+            Placard.Views.Grid.draw({
+                canvas, 
+                options: {
+                    lineWidth: 1,
+                }}
+            )
+            ,
+        ]);
+
+    break;
+
+// ...
+
+```
+
+### Hide view primitives
+
+> Every view's primitive such as `Placard.Views.Line` accepts `options` object to which we can pass `hidden: !false`: it is useful if we want more fine-grained control regarding overall composition...
+
 ---
 
 ### Building (production)

@@ -28,7 +28,9 @@ export default function setView({stage, Placard, UserSettings}){
 
                     context.setTransform(...setAngle(45), stage.grid.X_IN_MIDDLE, stage.grid.Y_IN_MIDDLE);
                     context.scale(-1, -1)
-                        RightTriangle.draw({context, Placard});
+                        RightTriangle.draw({context, Placard, options: {
+                            dashed: true
+                        }});
 
                 break;
 

@@ -53,34 +53,23 @@ export default class {
 
         context.beginPath();
 
-            options.points
-            .forEach((point, i)=>{
+            options.points.forEach((point, i)=>{
 
-                if (i === 0){
-
-                    switch (options.kind) {
-                        case 'ring':
-                            context.moveTo(
-                                ( context.global.options.responsiveValue * ( point[0] ) ) - (options.lineWidth ||  context.global.options.lineWidth)
-                                , 
-                                ( context.global.options.responsiveValue * ( point[1] ) ) - (options.lineWidth ||  context.global.options.lineWidth)
-                            );
-                            break;
-                        default /* === ('circle' || 'line') */ :
-                            context.moveTo(
-                                0
-                                , 
-                                0
-                            );
-                            break;
-                    }
-
+                if (i === 0) context.moveTo(0, 0) ;
+                
+                if (options.dashed){
+                        // DEV_NOTE # this could be automatized
+                        context.lineTo(point[0]*(0.2 + 0.0), point[1]*(0.2 + 0.0)) ;
+                        context.moveTo(point[0]*(0.2 + 0.1), point[1]*(0.2 + 0.1)) ;
+                        context.lineTo(point[0]*(0.3 + 0.2), point[1]*(0.3 + 0.2)) ;
+                        context.moveTo(point[0]*(0.5 + 0.1), point[1]*(0.5 + 0.1)) ;
+                        context.lineTo(point[0]*(0.6 + 0.2), point[1]*(0.6 + 0.2)) ;
+                        context.moveTo(point[0]*(0.8 + 0.1), point[1]*(0.8 + 0.1)) ;
+                        context.moveTo(point[0]*(0.9 + 0.1), point[1]*(0.9 + 0.1)) ;
+                        context.lineTo(point[0]*1, point[1]*1)                     ;
+                } else {
+                        context.lineTo(point[0], point[1]);
                 }
-                context.lineTo(
-                    (/* context.global.options.responsiveValue *  */(point[0]))
-                    , 
-                    (/* context.global.options.responsiveValue *  */(point[1]))
-                );
                 
             });
                     
@@ -100,8 +89,8 @@ export default class {
                 this.addArrowTip({
                     context,
                     options,
-                    x2: (point[0])/*  * context.global.options.responsiveValue */,
-                    y2: (point[1])/*  * context.global.options.responsiveValue */,
+                    x2: point[0],
+                    y2: point[1],
                     arrowTip: (options?.arrowTip || {baseLength : (context.global.options.lineWidth * 5), capLength : 0, width : (context.global.options.lineWidth * 5)})
                 });
             });
@@ -131,10 +120,13 @@ export default class {
 
         context.save();
 
-        let { x: offsetX, y: offsetY } = (options.overrides?.transform?.translation || {x: 0, y: 0});
-        let angleXY = (options.overrides?.transform?.angle || 0);
-            context.translate(offsetX/*  * context.global.options.responsiveValue */, offsetY/*  * context.global.options.responsiveValue */)
-            context.rotate(angleXY)
+            const 
+                { x: offsetX, y: offsetY } = (options.overrides?.transform?.translation || {x: 0, y: 0})
+                ,
+                angleXY = (options.overrides?.transform?.angle || 0)
+                ;
+                context.translate(offsetX, offsetY)
+                context.rotate(angleXY)
 
             // Calculate the angle of the line
             const angle = Math.atan2(y2 - y1, x2 - x1);

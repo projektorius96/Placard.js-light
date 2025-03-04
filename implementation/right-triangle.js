@@ -1,6 +1,6 @@
 export default class {
 
-    static draw({context, Placard}) {        
+    static draw({context, options: forwardedOptions, Placard}) {        
 
         const 
             { COLORS } = Placard.Views.Line.ENUMS
@@ -31,6 +31,7 @@ export default class {
                     hidden: false,
                     label: `vector-${COLORS.green.value}`,
                     kind: 'vector', /* DEV_NOTE # can be used with `arrowTip`  */
+                    dashed: forwardedOptions?.dashed,
                     /* arrowTip : {baseLength : 20, capLength : 0, width : 20}, */// 1^[PASSING]
                     strokeStyle: COLORS.green.value,
                     points: [ 
@@ -42,8 +43,8 @@ export default class {
                     overrides: {
                         transform: {
                             angle: degToRad(45)
-                        }
-                    }
+                        },
+                    },
                 }
             })
             ,
@@ -53,6 +54,7 @@ export default class {
                     hidden: false,
                     label: `vector-${COLORS.blue.value}`,
                     kind: 'vector',
+                    dashed: forwardedOptions?.dashed,
                     strokeStyle: COLORS.blue.value,
                     points: [ 
                         [

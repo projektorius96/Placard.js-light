@@ -53,34 +53,46 @@ export default class {
 
         context.beginPath();
 
-            options.points
-            .forEach((point, i)=>{
+            options.points.forEach((point, i)=>{
 
-                if (i === 0){
+                if (i === 0) /* 1^ */ context.moveTo(0, 0) ;
+                
+                if (!options.dashed){
 
-                    switch (options.kind) {
-                        case 'ring':
-                            context.moveTo(
-                                ( context.global.options.responsiveValue * ( point[0] ) ) - (options.lineWidth ||  context.global.options.lineWidth)
-                                , 
-                                ( context.global.options.responsiveValue * ( point[1] ) ) - (options.lineWidth ||  context.global.options.lineWidth)
-                            );
-                            break;
-                        default /* === ('circle' || 'line') */ :
-                            context.moveTo(
-                                0
-                                , 
-                                0
-                            );
-                            break;
-                    }
+                    context.lineTo(point[0], point[1]);
 
+                } else {
+
+                    const 
+                        perfectBase = 6
+                        ,
+                        nFingers_mGaps = perfectBase * context.global.options.dashedLineDensity
+                        ,
+                        _mGaps = (nFingers_mGaps * context.global.options.dashedLineDensity ) - 1
+                        ,
+                        reminder = Math.abs( ( ( 1 / _mGaps ) - ( 1 / ( nFingers_mGaps * context.global.options.dashedLineDensity ) ) ) ) * _mGaps
+                        ,
+                        multiplicand = (1 - reminder) / (nFingers_mGaps )
+                        ;
+                    const weighedLineDistance = Math.sqrt( (point[0]*multiplicand)**2 + (point[1]*multiplicand)**2 );
+                    
+                    Array( nFingers_mGaps ).fill(nFingers_mGaps).forEach((_, i)=>{
+
+                        switch (i) {
+                            case 0:
+                                context.moveTo(0, 0) ;
+                                context.lineTo(weighedLineDistance, weighedLineDistance) ;
+                                break;
+                            default: 
+                                if (i >= ( perfectBase / 2 ) * context.global.options.dashedLineDensity - (context.global.options.dashedLineDensity - 1) ) return;                                
+                                context.moveTo(weighedLineDistance*(i*2), weighedLineDistance*(i*2)) ;
+                                context.lineTo(weighedLineDistance*(i*2) + weighedLineDistance, weighedLineDistance*(i*2) + weighedLineDistance);
+                                break;
+                        }
+
+                    })
+                    
                 }
-                context.lineTo(
-                    (/* context.global.options.responsiveValue *  */(point[0]))
-                    , 
-                    (/* context.global.options.responsiveValue *  */(point[1]))
-                );
                 
             });
                     
@@ -100,8 +112,8 @@ export default class {
                 this.addArrowTip({
                     context,
                     options,
-                    x2: (point[0])/*  * context.global.options.responsiveValue */,
-                    y2: (point[1])/*  * context.global.options.responsiveValue */,
+                    x2: point[0],
+                    y2: point[1],
                     arrowTip: (options?.arrowTip || {baseLength : (context.global.options.lineWidth * 5), capLength : 0, width : (context.global.options.lineWidth * 5)})
                 });
             });
@@ -131,10 +143,13 @@ export default class {
 
         context.save();
 
-        let { x: offsetX, y: offsetY } = (options.overrides?.transform?.translation || {x: 0, y: 0});
-        let angleXY = (options.overrides?.transform?.angle || 0);
-            context.translate(offsetX/*  * context.global.options.responsiveValue */, offsetY/*  * context.global.options.responsiveValue */)
-            context.rotate(angleXY)
+            const 
+                { x: offsetX, y: offsetY } = (options.overrides?.transform?.translation || {x: 0, y: 0})
+                ,
+                angleXY = (options.overrides?.transform?.angle || 0)
+                ;
+                context.translate(offsetX, offsetY)
+                context.rotate(angleXY)
 
             // Calculate the angle of the line
             const angle = Math.atan2(y2 - y1, x2 - x1);

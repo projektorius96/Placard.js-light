@@ -55,20 +55,31 @@ export default class {
 
             options.points.forEach((point, i)=>{
 
-                if (i === 0) context.moveTo(0, 0) ;
+                if (i === 0) /* 1^ */ context.moveTo(0, 0) ;
                 
-                if (options.dashed){
-                        // DEV_NOTE # this could be automatized
-                        context.lineTo(point[0]*(0.2 + 0.0), point[1]*(0.2 + 0.0)) ;
-                        context.moveTo(point[0]*(0.2 + 0.1), point[1]*(0.2 + 0.1)) ;
-                        context.lineTo(point[0]*(0.3 + 0.2), point[1]*(0.3 + 0.2)) ;
-                        context.moveTo(point[0]*(0.5 + 0.1), point[1]*(0.5 + 0.1)) ;
-                        context.lineTo(point[0]*(0.6 + 0.2), point[1]*(0.6 + 0.2)) ;
-                        context.moveTo(point[0]*(0.8 + 0.1), point[1]*(0.8 + 0.1)) ;
-                        context.moveTo(point[0]*(0.9 + 0.1), point[1]*(0.9 + 0.1)) ;
-                        context.lineTo(point[0]*1, point[1]*1)                     ;
+                if (!options.dashed){
+
+                    context.lineTo(point[0], point[1]);
+
                 } else {
-                        context.lineTo(point[0], point[1]);
+
+                    // DEV_NOTE # this could be automatized
+                    const fingers4gaps3 = 4;
+                    let [gapWidth, counter] = [0.2, 0 ?? -0.1 /* <= DEV_NOTE # optionally, we can control whether origin is included or not */];
+                    Array(fingers4gaps3).fill([context.moveTo.bind(context), context.lineTo.bind(context)]).forEach(([moveTo, lineTo], i)=>{
+                        counter += 0.1;
+                        if (i === 0) {
+                            /* counter += 0.1; */// DEV_NOTE # this line is more of the problem, than more of a use...
+                            context.moveTo(0, 0)
+                            lineTo(point[0]*(counter + 0.0), point[1]*(counter + 0.0))
+                        } else {
+                            /* DEV_NOTE # if (i !== 0), thus... */
+                            moveTo(point[0]*(counter), point[1]*(counter));
+                            lineTo(point[0]*(counter + gapWidth), point[1]*(counter + gapWidth));
+                            counter += 0.2;
+                        }                        
+                    })
+                    
                 }
                 
             });
@@ -83,7 +94,7 @@ export default class {
         context.restore();
 
         options.hidden ? options.kind = `!${this.ENUMS.KIND.vector.value}` : options.kind;
-        if (options.kind === this.ENUMS.KIND.vector.value) {
+        if (!options.kind === this.ENUMS.KIND.vector.value) {
 
             options.points.forEach((point)=>{
                 this.addArrowTip({

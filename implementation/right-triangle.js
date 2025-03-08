@@ -16,6 +16,7 @@ export default class {
                     hidden: false,
                     label: `vector-${COLORS.red.value}`,
                     kind: 'vector',
+                    /* dashed: forwardedOptions?.dashed, */
                     strokeStyle: COLORS.red.value,
                     points: [ 
                         [

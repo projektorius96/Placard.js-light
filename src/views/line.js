@@ -63,13 +63,19 @@ export default class {
 
                 } else {
 
-                    const perfectBase = 6;
-                    const nFingers_mGaps = perfectBase * context.global.options.dashedLineDensity;
-                    const _mGaps = (nFingers_mGaps * context.global.options.dashedLineDensity ) - 1; 
-                    const reminder = Math.abs( ( ( 1 / _mGaps ) - ( 1 / ( nFingers_mGaps * context.global.options.dashedLineDensity ) ) ) ) * _mGaps ;
-                    const multiplicand = (1 - reminder) / (nFingers_mGaps );
+                    const 
+                        perfectBase = 6
+                        ,
+                        nFingers_mGaps = perfectBase * context.global.options.dashedLineDensity
+                        ,
+                        _mGaps = (nFingers_mGaps * context.global.options.dashedLineDensity ) - 1
+                        ,
+                        reminder = Math.abs( ( ( 1 / _mGaps ) - ( 1 / ( nFingers_mGaps * context.global.options.dashedLineDensity ) ) ) ) * _mGaps
+                        ,
+                        multiplicand = (1 - reminder) / (nFingers_mGaps )
+                        ;
+                    const weighedLineDistance = Math.sqrt( (point[0]*multiplicand)**2 + (point[1]*multiplicand)**2 );
                     
-                    let weighedLineDistance = Math.sqrt( (point[0]*multiplicand)**2 + (point[1]*multiplicand)**2 ); 
                     Array( nFingers_mGaps ).fill(nFingers_mGaps).forEach((_, i)=>{
 
                         switch (i) {
@@ -77,8 +83,8 @@ export default class {
                                 context.moveTo(0, 0) ;
                                 context.lineTo(weighedLineDistance, weighedLineDistance) ;
                                 break;
-                            default:
-                                if (i >= 3*context.global.options.dashedLineDensity - (context.global.options.dashedLineDensity - 1) ) return;                                
+                            default: 
+                                if (i >= ( perfectBase / 2 ) * context.global.options.dashedLineDensity - (context.global.options.dashedLineDensity - 1) ) return;                                
                                 context.moveTo(weighedLineDistance*(i*2), weighedLineDistance*(i*2)) ;
                                 context.lineTo(weighedLineDistance*(i*2) + weighedLineDistance, weighedLineDistance*(i*2) + weighedLineDistance);
                                 break;

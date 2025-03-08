@@ -63,21 +63,40 @@ export default class {
 
                 } else {
 
-                    // DEV_NOTE # this could be automatized
                     const fingers4gaps3 = 4;
-                    let [gapWidth, counter] = [0.2, 0 ?? -0.1 /* <= DEV_NOTE # optionally, we can control whether origin is included or not */];
-                    Array(fingers4gaps3).fill([context.moveTo.bind(context), context.lineTo.bind(context)]).forEach(([moveTo, lineTo], i)=>{
-                        counter += 0.1;
-                        if (i === 0) {
-                            /* counter += 0.1; */// DEV_NOTE # this line is more of the problem, than more of a use...
-                            context.moveTo(0, 0)
-                            lineTo(point[0]*(counter + 0.0), point[1]*(counter + 0.0))
-                        } else {
-                            /* DEV_NOTE # if (i !== 0), thus... */
-                            moveTo(point[0]*(counter), point[1]*(counter));
-                            lineTo(point[0]*(counter + gapWidth), point[1]*(counter + gapWidth));
-                            counter += 0.2;
-                        }                        
+                    let weighedLineDistance = Math.sqrt( (point[0]*0.1)**2 + (point[1]*0.1)**2 ); 
+                    Array(fingers4gaps3).fill(context).forEach((_, i)=>{
+
+                        // DEV_NOTE (IGNORE) # deterministic model 
+                        // switch (i) {
+                        //     case 0:
+                        //         context.moveTo(0, 0) ;
+                        //         context.lineTo(weighedLineDistance, weighedLineDistance) ;
+                        //         break;
+                        //     case 1:
+                        //         context.moveTo(weighedLineDistance*(i*2), weighedLineDistance*(i*2)) ;
+                        //         context.lineTo(weighedLineDistance*(i*2) + weighedLineDistance, weighedLineDistance*(i*2) + weighedLineDistance) ;
+                        //         break;
+                        //     case 2:
+                        //         context.moveTo(weighedLineDistance*(i*2), weighedLineDistance*(i*2)) ;
+                        //         context.lineTo(weighedLineDistance*(i*2) + weighedLineDistance, weighedLineDistance*(i*2) + weighedLineDistance) ;
+                        //         break;
+                        //     case 3:
+                        //     // ...
+                        //         break;
+                        // }
+
+                        switch (i) {
+                            case 0:
+                                context.moveTo(0, 0) ;
+                                context.lineTo(weighedLineDistance, weighedLineDistance) ;
+                                break;
+                            default:
+                                context.moveTo(weighedLineDistance*(i*2), weighedLineDistance*(i*2)) ;
+                                context.lineTo(weighedLineDistance*(i*2) + weighedLineDistance, weighedLineDistance*(i*2) + weighedLineDistance);
+                                break;
+                        }
+
                     })
                     
                 }

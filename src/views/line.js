@@ -106,7 +106,7 @@ export default class {
         context.restore();
 
         options.hidden ? options.kind = `!${this.ENUMS.KIND.vector.value}` : options.kind;
-        if (!options.kind === this.ENUMS.KIND.vector.value) {
+        if (options.kind === this.ENUMS.KIND.vector.value) {
 
             options.points.forEach((point)=>{
                 this.addArrowTip({

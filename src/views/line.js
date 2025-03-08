@@ -63,28 +63,14 @@ export default class {
 
                 } else {
 
-                    const fingers4gaps3 = 4;
-                    let weighedLineDistance = Math.sqrt( (point[0]*0.1)**2 + (point[1]*0.1)**2 ); 
-                    Array(fingers4gaps3).fill(context).forEach((_, i)=>{
-
-                        // DEV_NOTE (IGNORE) # deterministic model 
-                        // switch (i) {
-                        //     case 0:
-                        //         context.moveTo(0, 0) ;
-                        //         context.lineTo(weighedLineDistance, weighedLineDistance) ;
-                        //         break;
-                        //     case 1:
-                        //         context.moveTo(weighedLineDistance*(i*2), weighedLineDistance*(i*2)) ;
-                        //         context.lineTo(weighedLineDistance*(i*2) + weighedLineDistance, weighedLineDistance*(i*2) + weighedLineDistance) ;
-                        //         break;
-                        //     case 2:
-                        //         context.moveTo(weighedLineDistance*(i*2), weighedLineDistance*(i*2)) ;
-                        //         context.lineTo(weighedLineDistance*(i*2) + weighedLineDistance, weighedLineDistance*(i*2) + weighedLineDistance) ;
-                        //         break;
-                        //     case 3:
-                        //     // ...
-                        //         break;
-                        // }
+                    const perfectBase = 6;
+                    const nFingers_mGaps = perfectBase * context.global.options.dashedLineDensity;
+                    const _mGaps = (nFingers_mGaps * context.global.options.dashedLineDensity ) - 1; 
+                    const reminder = Math.abs( ( ( 1 / _mGaps ) - ( 1 / ( nFingers_mGaps * context.global.options.dashedLineDensity ) ) ) ) * _mGaps ;
+                    const multiplicand = (1 - reminder) / (nFingers_mGaps );
+                    
+                    let weighedLineDistance = Math.sqrt( (point[0]*multiplicand)**2 + (point[1]*multiplicand)**2 ); 
+                    Array( nFingers_mGaps ).fill(nFingers_mGaps).forEach((_, i)=>{
 
                         switch (i) {
                             case 0:
@@ -92,6 +78,7 @@ export default class {
                                 context.lineTo(weighedLineDistance, weighedLineDistance) ;
                                 break;
                             default:
+                                if (i >= 3*context.global.options.dashedLineDensity - (context.global.options.dashedLineDensity - 1) ) return;                                
                                 context.moveTo(weighedLineDistance*(i*2), weighedLineDistance*(i*2)) ;
                                 context.lineTo(weighedLineDistance*(i*2) + weighedLineDistance, weighedLineDistance*(i*2) + weighedLineDistance);
                                 break;

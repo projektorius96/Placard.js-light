@@ -14,6 +14,7 @@ export default class {
                 options: {
                     scalingValue: 4,
                     lineWidth: 4,
+                    dashedLineDensity: 5,
                     strokeStyle: 'grey',
                 }
             },

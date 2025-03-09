@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
                         options: {
                             id: `${SVGraphics.Views.Circle}-123`,
                             radius: 20,
+                            translateX: window.innerWidth/2,
+                            translateY: window.innerHeight/2,
                             fill: 'red'
                         }
                     })
@@ -41,41 +43,51 @@ document.addEventListener('DOMContentLoaded', ()=>{
     
     if ( setViews({stage, Placard, UserSettings}) ) {
 
-        window.addEventListener('resize', setViews.bind(null, {stage, Placard, UserSettings}));
+        window.addEventListener('resize', ()=>{
 
-        /* === SVGraphics === */
+            setViews({stage, Placard, UserSettings})
+
+                    /* === SVGraphics === */
         
-            const alias = new Map([
-                ['radius', 'r'],
-                ['circleX', 'cx'],
-                ['circleY', 'cy'],
-            ]);
+                    /* window.addEventListener('resize', ()=>{ */
+                        if (stage.grid){
+                            document.querySelector(SVGraphics.Views.Circle).replaceWith(
+                                Reflect.construct(
+                                    customElements.get(SVGraphics.Views.Circle)
+                                    ,
+                                    ArgsList({
+                                        options: {
+                                            id: `${SVGraphics.Views.Circle}-123`,
+                                            radius: stage.grid.GRIDCELL_DIM / 4,
+                                            translateX: stage.grid.X_IN_MIDDLE / devicePixelRatio,
+                                            translateY: stage.grid.Y_IN_MIDDLE / devicePixelRatio,
+                                            fill: 'coral'
+                                        }
+                                    })
+                                )
+                            )
+        
+                            const circle = document.getElementById(`${SVGraphics.Views.Circle}-123`);
+                                circle.addEventListener('mouseenter', function(){
+                                    
+                                        this?.setAttribute('fill', 'magenta');
+                                    
+                                });
+                                circle.addEventListener('mouseleave', function(){
+                
+                                    this?.setAttribute('fill', getComputedStyle(this.parentElement).fill);
+                
+                                });
+        
+                        }
+                    /* }); */
+        
+                /* === SVGraphics === */
 
-            const circle = document.getElementById(`${SVGraphics.Views.Circle}-123`);
-            const computedCSS = getComputedStyle(circle.parentElement);
+        });
 
-                circle.addEventListener('mouseenter', function(){
-                    
-                        this?.setAttribute('fill', 'green');
-                    
-                })
+        window.dispatchEvent(new Event('resize'))
 
-                circle.addEventListener('mouseleave', function(){
-
-                    this?.setAttribute('fill', computedCSS.fill);
-
-                })
-
-            window.addEventListener('resize', ()=>{
-                if (stage.grid){
-                    // DEV_NOTE # in the future `SVGraphics` could expose pair of getter|setter to define the following listed below:..
-                    circle?.setAttribute(alias.get('radius'), stage.grid.GRIDCELL_DIM / 4 );
-                    circle?.setAttribute(alias.get('circleX'), Math.floor( window.innerWidth / 2 ) );
-                    circle?.setAttribute(alias.get('circleY'), Math.floor( window.innerHeight / 2 ) );
-                }
-            });
-
-        /* === SVGraphics === */
     }
 
 });

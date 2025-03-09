@@ -18,26 +18,45 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if ( stage ) {
 
             stage.add([
+                new Layer({ name: 'grid', opacity: 0.25 /* , isSkewed: {sign: -1} */ })
+                ,
                 Reflect.construct(
                     customElements.get(SVGraphics.Views.Circle)
                     ,
                     ArgsList({
                         options: {
-                            radius: 60,
-                            fill: 'orange'
+                            id: `${SVGraphics.Views.Circle}-123`,
+                            radius: 100,
+                            fill: 'green'
                         }
                     })
                 )
-                ,
-                new Layer({ name: 'grid', opacity: 0.25 /* , isSkewed: {sign: -1} */ })
-                ,
-                // new Layer({ name: 'axes-helper', hidden: /* ! */false })
-                // ,
-                // new Layer({ name: 'right-triangle', opacity: 0.75 })
             ]);
         
         }
     
-    if ( setViews({stage, Placard, UserSettings}) ) window.addEventListener('resize', setViews.bind(null, {stage, Placard, UserSettings})) ;
+    if ( setViews({stage, Placard, UserSettings}) ) {
+
+        window.addEventListener('resize', setViews.bind(null, {stage, Placard, UserSettings}));
+
+        /* === SVGraphics === */
+        
+            const alias = new Map([
+                ['radius', 'r'],
+                ['circleX', 'cx'],
+                ['circleY', 'cy'],
+            ]);
+
+            window.addEventListener('resize', ()=>{
+                if (stage.grid){
+                    // DEV_NOTE # in the future `SVGraphics` could expose pair of getter|setter to define the following listed below:..
+                    document.getElementById(`${SVGraphics.Views.Circle}-123`).setAttribute(alias.get('radius'), stage.grid.GRIDCELL_DIM );
+                    document.getElementById(`${SVGraphics.Views.Circle}-123`).setAttribute(alias.get('circleX'), Math.ceil( window.innerWidth / 2 ) );
+                    document.getElementById(`${SVGraphics.Views.Circle}-123`).setAttribute(alias.get('circleY'), Math.ceil( window.innerHeight / 2 ) );
+                }
+            });
+
+        /* === SVGraphics === */
+    }
 
 });

@@ -1,5 +1,5 @@
 import Placard from './src/index';
-import { SVGraphics } from 'svgraphics'
+import SVGraphics from 'svgraphics';
 import setViews from './implementation/index.js';
 import UserSettings from './user-settings';
 import package_json from './package.json' with {type: 'json'}; // DEV_NOTE (1.1, see@1.2) # web.dev highly suggests to use this line only in non-PWA case

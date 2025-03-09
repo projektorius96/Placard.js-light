@@ -98,9 +98,13 @@ function responsify({stage}){
     }
 
     if (stage.children.length > 0){
-        Array.from( stage.children ).forEach((layer)=>{ 
-            layer.width = muttable.stageWidth;
-            layer.height = muttable.stageHeight;
+        Array.from( stage.children ).forEach((layer)=>{
+            
+            if (layer instanceof HTMLCanvasElement) {
+                layer.width = muttable.stageWidth;
+                layer.height = muttable.stageHeight;
+            }
+
         });
     }
 

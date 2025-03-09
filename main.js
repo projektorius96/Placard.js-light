@@ -1,4 +1,5 @@
 import Placard from './src/index';
+import { SVGraphics } from 'svgraphics'
 import setViews from './implementation/index.js';
 import UserSettings from './user-settings';
 import package_json from './package.json' with {type: 'json'}; // DEV_NOTE (1.1, see@1.2) # web.dev highly suggests to use this line only in non-PWA case
@@ -17,11 +18,22 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if ( stage ) {
 
             stage.add([
+                Reflect.construct(
+                    customElements.get(SVGraphics.Views.Circle)
+                    ,
+                    ArgsList({
+                        options: {
+                            radius: 60,
+                            fill: 'orange'
+                        }
+                    })
+                )
+                ,
                 new Layer({ name: 'grid', opacity: 0.25 /* , isSkewed: {sign: -1} */ })
                 ,
-                new Layer({ name: 'axes-helper', hidden: /* ! */false })
-                ,
-                new Layer({ name: 'right-triangle', opacity: 0.75 })
+                // new Layer({ name: 'axes-helper', hidden: /* ! */false })
+                // ,
+                // new Layer({ name: 'right-triangle', opacity: 0.75 })
             ]);
         
         }

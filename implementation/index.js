@@ -17,45 +17,49 @@ export default function setView({stage, Placard, UserSettings}){
 
         if ( UserSettings.init({context}) ) {
 
+            if ( context instanceof CanvasRenderingContext2D ) {
+
             // DEV_NOTE # scale twice as big, if mobile device is detected :
             CONDITIONS.isMobile ? context.global.options.scalingValue *= 2 : screen.orientation.type.includes('portrait') * 1 ;
 
-            let canvas = context.canvas;
-            
-            switch (canvas.name) {
+                let canvas = context.canvas;
 
-                case 'right-triangle' :
+                switch (canvas.name) {
 
-                    context.setTransform(...setAngle(45), stage.grid.X_IN_MIDDLE, stage.grid.Y_IN_MIDDLE);
-                    context.scale(-1, -1)
-                        RightTriangle.draw({context, Placard, options: {
-                            dashed: true
-                        }});
+                    case 'right-triangle' :
+    
+                        context.setTransform(...setAngle(45), stage.grid.X_IN_MIDDLE, stage.grid.Y_IN_MIDDLE);
+                        context.scale(-1, -1)
+                            RightTriangle.draw({context, Placard, options: {
+                                dashed: true
+                            }});
+    
+                    break;
+    
+                    case 'grid' :
+    
+                        stage.layers.grid.add([
+                            Placard.Views.Grid.draw({
+                                canvas, 
+                                options: {
+                                    lineWidth: 1,
+                                }}
+                            )
+                            ,
+                        ]);
+    
+                    break;
+    
+                    case 'axes-helper' :
+    
+                        context.setTransform(...setAngle(0), stage.grid.X_IN_MIDDLE, stage.grid.Y_IN_MIDDLE); // # Layer-level transformation
+                            AxesHelper.draw({context, Placard});
+                    
+                    break;
+    
+                endswitch:;}
 
-                break;
-
-                case 'grid' :
-
-                    stage.layers.grid.add([
-                        Placard.Views.Grid.draw({
-                            canvas, 
-                            options: {
-                                lineWidth: 1,
-                            }}
-                        )
-                        ,
-                    ]);
-
-                break;
-
-                case 'axes-helper' :
-
-                    context.setTransform(...setAngle(0), stage.grid.X_IN_MIDDLE, stage.grid.Y_IN_MIDDLE); // # Layer-level transformation
-                        AxesHelper.draw({context, Placard});
-                
-                break;
-
-            endswitch:;}
+            }
 
         endif:;}
         

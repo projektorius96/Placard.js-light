@@ -17,7 +17,15 @@ export default class {
 
         if ( responsify({ stage }) ) {
             return (
-                getIterable(stage.layers).map( canvas => canvas = canvas.getContext('2d') )
+                getIterable(stage.layers).map( canvas => {
+                    if (canvas instanceof HTMLCanvasElement) {
+
+                        return (
+                            canvas = canvas.getContext('2d')
+                        )
+
+                    }
+                } )
             );
         }
 

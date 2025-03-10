@@ -30,10 +30,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
                     ArgsList({
                         options: {
                             id: `${SVGraphics.Views.Circle}-123`,
-                            radius: 20,
-                            translateX: window.innerWidth/2,
-                            translateY: window.innerHeight/2,
-                            fill: 'red'
+                            /* fill: 'red' */
                         }
                     })
                 )
@@ -49,43 +46,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
                     /* === SVGraphics === */
         
-                    /* window.addEventListener('resize', ()=>{ */
                         if (stage.grid){
-                            document.querySelector(SVGraphics.Views.Circle).replaceWith(
-                                Reflect.construct(
-                                    customElements.get(SVGraphics.Views.Circle)
-                                    ,
-                                    ArgsList({
-                                        options: {
-                                            id: `${SVGraphics.Views.Circle}-123`,
-                                            radius: stage.grid.GRIDCELL_DIM / 4,
-                                            translateX: stage.grid.X_IN_MIDDLE / devicePixelRatio,
-                                            translateY: stage.grid.Y_IN_MIDDLE / devicePixelRatio,
-                                            fill: 'coral'
-                                        }
-                                    })
-                                )
-                            )
-        
+
                             const circle = document.getElementById(`${SVGraphics.Views.Circle}-123`);
                                 circle.addEventListener('mouseenter', function(){
                                     
-                                        this?.setAttribute('fill', 'magenta');
+                                        circle.setter.fill('magenta')
                                     
                                 });
                                 circle.addEventListener('mouseleave', function(){
-                
-                                    this?.setAttribute('fill', getComputedStyle(this.parentElement).fill);
+                                                    
+                                        circle.setter.fill('yellow')
                 
                                 });
+
+                                circle.setter.translate({X: stage.grid.X_IN_MIDDLE / window.devicePixelRatio, Y: Number(stage.grid.Y_IN_MIDDLE / window.devicePixelRatio)})
+                                circle.setter.radius({radius: Number(stage.grid.GRIDCELL_DIM / 8)})
         
                         }
-                    /* }); */
         
                 /* === SVGraphics === */
 
         });
 
+        // DEV_NOTE # to make sure arbitrary values matches with the `stage.grid` props given, whenever they are available 
         window.dispatchEvent(new Event('resize'))
 
     }

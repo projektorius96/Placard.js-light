@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
                     ArgsList({
                         options: {
                             id: `${SVGraphics.Views.Circle}-123`,
-                            /* fill: 'red' */
+                            fill: 'yellow'
                         }
                     })
                 )
@@ -48,20 +48,27 @@ document.addEventListener('DOMContentLoaded', ()=>{
         
                         if (stage.grid){
 
-                            const circle = document.getElementById(`${SVGraphics.Views.Circle}-123`);
-                                circle.addEventListener('mouseenter', function(){
-                                    
-                                        circle.setter.fill('magenta')
-                                    
-                                });
-                                circle.addEventListener('mouseleave', function(){
-                                                    
-                                        circle.setter.fill('yellow')
-                
-                                });
+                            const
+                                circle = document.getElementById(`${SVGraphics.Views.Circle}-123`)
+                                ;
+                                    circle.addEventListener('mouseenter', function(){
+                                        
+                                            circle.setter.fill('magenta')
+                                        
+                                    });
+                                    circle.addEventListener('mouseleave', function(){
+                                            
+                                            circle.setter.fill( circle.ownerSVGElement.parentElement.options.fill )
+                    
+                                    });
 
-                                circle.setter.translate({X: stage.grid.X_IN_MIDDLE / window.devicePixelRatio, Y: Number(stage.grid.Y_IN_MIDDLE / window.devicePixelRatio)})
-                                circle.setter.radius({radius: Number(stage.grid.GRIDCELL_DIM / 8)})
+                                circle.setter.translate({
+                                    x: stage.grid.SVG.X_IN_MIDDLE, 
+                                    y: Number(stage.grid.SVG.Y_IN_MIDDLE)
+                                });
+                                circle.setter.radius({
+                                    radius: Number(stage.grid.GRIDCELL_DIM / 8)
+                                });
         
                         }
         

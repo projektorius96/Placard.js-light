@@ -91,6 +91,13 @@ function responsify({stage}){
         X_IN_MIDDLE: X_IN_MIDDLE * window.devicePixelRatio, 
         Y_IN_MIDDLE: Y_IN_MIDDLE * window.devicePixelRatio,
     }
+
+    Object.assign( stage.grid, {
+        SVG: {
+            X_IN_MIDDLE: stage.grid.X_IN_MIDDLE / window.devicePixelRatio, 
+            Y_IN_MIDDLE: stage.grid.Y_IN_MIDDLE / window.devicePixelRatio,
+        }
+    });
     
     const muttable = {
         stageWidth: stage?.clientWidth * window.devicePixelRatio,
